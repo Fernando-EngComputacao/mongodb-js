@@ -1,8 +1,11 @@
 const mongodb = require("./../database/mongodb");
+let userCollection;
 
-const client = mongodb.connect();
+(async ()=> {
+    const client = mongodb.connect();
+    userCollection = client.db().collection('user');
+});
 
-const userCollection = client.db().collection('user');
 
 // INSERT
 const insert = (user) => {

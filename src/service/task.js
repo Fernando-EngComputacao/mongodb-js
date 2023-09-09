@@ -1,8 +1,10 @@
 const mongodb = require("./../database/mongodb");
+let taskCollection;
 
-const client =  mongodb.connect();
-
-const taskCollection = client.db().collection('task');
+(async ()=> {
+    const client = mongodb.connect();
+    taskCollection = client.db().collection('task');
+});
 
 // INSERT
 const insert = (task) => {
@@ -16,7 +18,7 @@ const insert = (task) => {
 }
 
 //READ
-const readByExpires = (experiesAt) => {
+const readByExpires = () => {
     const now = new Date().getTime();
     taskCollection.find({experiesAt:{$lt:now}})
         .toArray()

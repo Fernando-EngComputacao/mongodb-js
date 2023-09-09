@@ -2,8 +2,6 @@ const mongodb = require("./database/mongodb");
 const taskService = require("./service/task");
 const userService = require("./service/user");
 
-mongodb.connect()
-
 const experies = new Date();
 experies.setHours(23);
 
@@ -57,10 +55,33 @@ async function insertUser() {
 }
 
 async function readUser() {
-    userService.readyBy("maria@email.com");
-    userService.readyBy("jose@email.com");
+    maria =  (await userService.readyBy("maria@email.com"))[0];
+    joao = (await userService.readyBy("jose@email.com"))[0];
+}
+//TASKS
+async function insertTask() {
+    taskService.insert(task1);
+    taskService.insert(task2);
+}
+
+async function readTask() {
+    const taskFromMaria = await taskService.readByUser(maria.email);
+    console.log('Task from Maria', taskFromMaria);
+}
+
+async function makeTaskExpires () {
+    const now = new Date().getTime();
+    const taskExpires = await taskService.readByExpires();
+    console.log(taskExpires);
+/*  const taskExpires0 = taskExpires[0];
+    taskService.updateById(taskExpires0._id, {...taskExpires0, doneAt: now}); */
+}
+
+async function deleteTask() {
+    const task = (await taskService.readByUser(joao.email))[0];
+    taskService.deleteById(task._id);
+
 }
 
 
 
-//TASKS
