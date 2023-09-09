@@ -28,7 +28,7 @@ const task1 = {
         url: "pdf",
         uploadedAt: new Date().getTime()
     },
-    experiresAt: 1697079600000,
+    expiresAt: 1697079600000,
     doneAt: 1696906800000,
     responsibles: ["jose@email.com", "maria@email.com"] 
 }
@@ -43,7 +43,7 @@ const task2 = {
         url: "pdf",
         uploadedAt: new Date().getTime()
     },
-    experiresAt: 1696474800000,
+    expiresAt: 1676474800000,
     doneAt: null,
     responsibles: ["maria@email.com"] 
 }
@@ -55,8 +55,10 @@ async function insertUser() {
 }
 
 async function readUser() {
-    maria =  (await userService.readyBy("maria@email.com"))[0];
-    joao = (await userService.readyBy("jose@email.com"))[0];
+    maria = (await userService.readyBy('maria@email.com'))[0];
+    jose = (await userService.readyBy('jose@email.com'))[0];
+    //console.log("MARIA -> ", maria);
+    //console.log("JOSÉ -> ", jose);
 }
 //TASKS
 async function insertTask() {
@@ -65,6 +67,7 @@ async function insertTask() {
 }
 
 async function readTask() {
+    await readUser();
     const taskFromMaria = await taskService.readByUser(maria.email);
     console.log('Task from Maria', taskFromMaria);
 }
@@ -73,15 +76,35 @@ async function makeTaskExpires () {
     const now = new Date().getTime();
     const taskExpires = await taskService.readByExpires();
     console.log(taskExpires);
-/*  const taskExpires0 = taskExpires[0];
-    taskService.updateById(taskExpires0._id, {...taskExpires0, doneAt: now}); */
+    
 }
+
+
+async function doneTaskUpdate () {
+    const now = new Date().getTime();
+    const taskExpires = await taskService.readByExpires();
+    console.log(taskExpires);
+    const taskExpires0 = taskExpires[0];
+    taskService.updateById(taskExpires0._id, {...taskExpires0, doneAt: now});
+}
+
+
+
 
 async function deleteTask() {
-    const task = (await taskService.readByUser(joao.email))[0];
-    taskService.deleteById(task._id);
+    await readUser();
+    
+    console.log("\n***JOSÉ -> ", jose);
+    const task = await taskService.readByUser(jose.email);
+    console.log("\n***TASK DELETE -> ", task);
+    taskService.deleteById(task[0]._id);
 
 }
 
-
-
+//insertUser();
+//readUser();
+//insertTask();
+//readTask();
+//doneTaskUpdate();
+//makeTaskExpires();
+//deleteTask();

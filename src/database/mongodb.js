@@ -6,7 +6,7 @@ const uri = 'mongodb://127.0.0.1:27017/tedb';
 const client = new MongoClient(uri);
 
 const connect = () => {
-    client.connect()
+    return client.connect()
     .then(() => {
         console.log("CONECTADO");
         return client;
